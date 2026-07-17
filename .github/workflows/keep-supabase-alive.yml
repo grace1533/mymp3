@@ -1,0 +1,29 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # 每天 UTC 时间 0 点运行一次（北京时间早上 8 点）
+    # 你可以根据需要修改 cron 表达式，例如 '0 */12 * * *' 表示每 12 小时一次
+    - cron: '0 8 * * *'
+  workflow_dispatch: # 允许你在 GitHub 页面上手动触发测试
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          echo "Pinging Supabase..."
+          # 使用 curl 发送 GET 请求，并带上必要的 Headers
+          curl -f -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            || echo "Request failed, but Supabase might still register the activity."
+          
+      - name: Ping Supabase Auth API (可选，增加多样性)
+        run: |
+          echo "Pinging Supabase Auth..."
+          curl -f -X GET "${{ secrets.SUPABASE_URL }}/auth/v1/settings" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            || echo "Auth ping failed."
