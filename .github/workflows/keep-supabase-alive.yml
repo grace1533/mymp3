@@ -4,7 +4,7 @@ on:
   schedule:
     # 每天 UTC 时间 0 点运行一次（北京时间早上 8 点）
     # 你可以根据需要修改 cron 表达式，例如 '0 */12 * * *' 表示每 12 小时一次
-    - cron: '0 8 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch: # 允许你在 GitHub 页面上手动触发测试
 
 jobs:
